@@ -358,7 +358,7 @@ async function run_tests(req_per_browser) {
                 const avg_gpu_usage_2 = total_gpu_usage_after_tilesloaded / req_per_browser;
 
                 data.push({
-                    test: url.includes('index.html') ? 'Durchschnitt Normalfall' : 'Durchschnitt Stresstest',
+                    test: url.includes('normal') ? 'Durchschnitt Normalfall' : 'Durchschnitt Stresstest',
                     browser: browser,
                     loadtime: avg_load_time.toFixed(2),
                     cpuusage: avg_cpu_usage.toFixed(2),
