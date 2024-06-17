@@ -32,6 +32,8 @@ async function measurements(driver, url) {
 
         await driver.get(url);
 
+        
+      
        
         const gpu_on_pageload = await get_gpu_stats();
 
@@ -61,9 +63,9 @@ async function measurements(driver, url) {
 
         const avg_latency = sum_latency / latency_logs.length;
 
-        console.log("Start CPU-Nutzung:", CPU_on_start);
+        //console.log("Start CPU-Nutzung:", CPU_on_start);
         
-        console.log("Ende CPU-Nutzung:", CPU_on_end);
+        //console.log("Ende CPU-Nutzung:", CPU_on_end);
 
         return { duration, cpuUsageDiff: CPU_usage, memoryUsageDiff: RAM_usage, numRequests: num_reqeusts, averageLatency: avg_latency, gpuStatsPageLoad: gpu_on_pageload, gpuStatsTilesLoaded: GPU_stats_after_tilesloaded };
         
@@ -180,15 +182,15 @@ async function log_ressources(driver) {
 }
 
 async function measure_latency(driver) {
-    const latency_logs_2 = await driver.executeScript(`
+    const latency_logs = await driver.executeScript(`
         const entries = window.performance.getEntriesByType('resource');
         return entries.filter(entry => entry.name.includes('maps.googleapis.com')).map(entry => ({
             name: entry.name,
             latency: entry.responseEnd - entry.fetchStart // Calculate latency
         }));
     `);
-
-    return latency_logs_2;
+    //console.log('Latency Logs:', latency_logs); 
+    return latency_logs;
 }
 
 
@@ -324,7 +326,7 @@ async function run_tests(req_per_browser) {
                                 cpuusage: cpuUsageDiff.toFixed(2),
                                 memoryusage: memoryUsageDiff.toFixed(2),
                                 numreq: numRequests,
-                                avglatenvy: averageLatency.toFixed(2),
+                                avglatency: averageLatency.toFixed(2),
                                 gputempafterpageload: gpuStatsPageLoad.temperature,
                                 gpuusageafterpageload: gpuStatsPageLoad.utilization,
                                 gputempaftertilesloaded: gpuStatsTilesLoaded.temperature,

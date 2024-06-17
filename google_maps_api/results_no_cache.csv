@@ -1,17 +1,17 @@
 Testart,Browser,Ladezeit (ms),CPU-Nutzung (%),Ramverbrauch (MB),Anfragen,Durchschnittliche Latenz (ms),GPU nach dem Laden der Seite: Temperatur,GPU nach dem Laden der Seite: %-Nutzung,GPU nach Tiles loaded: Temperatur,GPU nach Tiles loaded: %-Nutzung
-Normal,chrome,899,1.00,34.14,10,,39, 2 %,39, 0 %
-Normal,chrome,644,-3.00,26.79,24,,39, 2 %,38, 1 %
-Normal,chrome,617,1.00,41.16,11,,39, 3 %,39, 0 %
-Durchschnitt Normalfall,chrome,720.00,-0.33,34.03,15.00,71.04,131313.00,NaN,131279.67,NaN
-Stresstest,chrome,1749,27.00,262.35,27,,40, 7 %,38, 27 %
-Stresstest,chrome,1696,48.00,243.11,27,,40, 7 %,38, 28 %
-Stresstest,chrome,1719,49.00,251.26,27,,40, 7 %,39, 9 %
-Durchschnitt Stresstest,chrome,1721.33,41.33,252.24,27.00,37.87,134680.00,NaN,127946.33,NaN
-Normal,MicrosoftEdge,661,-1.00,33.63,24,,40, 4 %,40, 0 %
-Normal,MicrosoftEdge,683,9.00,40.97,23,,40, 3 %,39, 0 %
-Normal,MicrosoftEdge,691,8.00,43.79,11,,40, 1 %,40, 0 %
-Durchschnitt Normalfall,MicrosoftEdge,678.33,5.33,39.46,19.33,96.43,134680.00,NaN,134646.67,NaN
-Stresstest,MicrosoftEdge,1792,61.00,266.57,27,,40, 7 %,39, 18 %
-Stresstest,MicrosoftEdge,1799,51.00,257.34,27,,40, 6 %,39, 31 %
-Stresstest,MicrosoftEdge,1764,72.00,257.28,27,,40, 6 %,39, 10 %
-Durchschnitt Stresstest,MicrosoftEdge,1785.00,61.33,260.39,27.00,50.27,134680.00,NaN,131313.00,NaN
+Normal,chrome,595,15.00,44.96,24,58.99,43, 7 %,42, 15 %
+Normal,chrome,663,25.00,41.50,16,52.71,42, 6 %,41, 5 %
+Normal,chrome,603,1.00,33.72,11,48.69,43, 6 %,41, 6 %
+Durchschnitt Normalfall,chrome,620.33,13.67,40.06,17.00,53.46,144747.67,NaN,141380.33,NaN
+Stresstest,chrome,1858,6.00,280.07,27,36.34,41, 16 %,41, 35 %
+Stresstest,chrome,1754,17.00,272.02,27,34.18,43, 11 %,41, 30 %
+Stresstest,chrome,1780,22.00,277.64,27,36.65,41, 13 %,41, 32 %
+Durchschnitt Stresstest,chrome,1797.33,15.00,276.58,27.00,35.72,138113.67,NaN,138047.00,NaN
+Normal,MicrosoftEdge,710,-5.00,39.67,11,77.16,42, 5 %,41, 5 %
+Normal,MicrosoftEdge,678,-11.00,49.93,24,70.23,42, 7 %,41, 6 %
+Normal,MicrosoftEdge,727,-20.00,50.16,11,79.36,43, 5 %,42, 6 %
+Durchschnitt Normalfall,MicrosoftEdge,705.00,-12.00,46.59,15.33,75.59,141414.33,NaN,138047.33,NaN
+Stresstest,MicrosoftEdge,1855,39.00,268.40,27,51.19,41, 11 %,41, 37 %
+Stresstest,MicrosoftEdge,1852,64.00,266.88,27,49.23,43, 11 %,41, 29 %
+Stresstest,MicrosoftEdge,1860,50.00,267.68,27,45.84,43, 11 %,41, 35 %
+Durchschnitt Stresstest,MicrosoftEdge,1855.67,51.00,267.65,27.00,48.75,138114.33,NaN,138047.00,NaN
