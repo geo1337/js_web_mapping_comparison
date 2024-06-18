@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thesis_Tests</title>
+    <style>
+ 
+    #map{
+      width: 800px !important;
+      margin: auto !important;
+    }
+
+
+    </style>
+
+
+  </head>
+  <body>
+
+    <div id="map" style="height: 400px;"></div>
+  
+
+  
+
+<script>
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+      key: " ",
+      v: "beta",
+    
+    });
+  </script>
+
+    <script>
+   
+      let map;
+      let click_time = null;
+      let zoom_start_time = null;
+      let drag_start_time = null;
+      let is_zoomed = false;
+      let first_load = true;
+
+      async function initMap() {
+        const position1 = { lat: 48.78, lng: 9.18 };
+        const position2 = { lat: 48.78042051275773, lng: 9.17259701727862 };
+
+        const { Map } = await google.maps.importLibrary("maps");
+        const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
+
+        var map_Options = {
+          zoom: 9,
+          center: position1,
+          mapId: "5a6f1a6eff3a37b0",
+        };
+
+        map = new Map(document.getElementById("map"), map_Options);
+
+        const content_String =
+          '<div>' +
+          '<div></div>' +
+          '<h1>Hier befindet sich die Hft</h1>' +
+          '<div>' +
+          "<p>Lorem Ipsum </p>" +
+          "</div>" +
+          "</div>";
+
+        const my_info_window = new google.maps.InfoWindow({
+          content: content_String,
+          ariaLabel: "Test",
+        });
+
+        const marker = new google.maps.marker.AdvancedMarkerView({
+          map: map,
+          position: position2,
+          title: "Hft",
+        });
+
+        marker.addListener("gmp-click", () => {
+          click_time = performance.now();
+          my_info_window.open({
+            anchor: marker,
+            map,
+          });
+        });
+
+        function infowindowDomReady() {
+          const end_time = performance.now();
+          const time_diff = end_time - click_time;
+          console.log('Zeit zwischen dem Klicken auf einen Marker und dem Anzeigen des Infofensters', time_diff.toFixed(2), 'ms');
+        }
+
+        google.maps.event.addListener(my_info_window, 'domready', infowindowDomReady);
+
+
+
+        function imgloadtimes() {
+
+    const img = document.querySelectorAll('img'); 
+
+    img.forEach(img => {
+      const img_src = img.getAttribute('src');
+      const img_format = img_src.endsWith('.jpg') ? 'webp' : 'jpg'; 
+
+      const img_load = performance.getEntriesByName(img_src)[0]?.startTime || null;
+      const img_end = performance.getEntriesByName(img_src)[0]?.responseEnd || null;
+
+      if (img_load && img_end) {
+        const img_load_time = img_end - img_load;
+        console.log(`Bildformat: ${img_format}, Ladezeit: ${img_load_time.toFixed(2)}ms`);
+      }
+    });
+  }
+
+
+
+
+        google.maps.event.addListener(map, 'zoom_changed', function() {
+          is_zoomed = true;
+          zoom_start_time = performance.now();
+          imgloadtimes();
+        });
+
+        google.maps.event.addListener(map, 'tilesloaded', function() {
+          if (is_zoomed) {
+            const zoom_end_time = performance.now();
+            const zoom_load_time = zoom_end_time - zoom_start_time;
+            console.log('Ladezeit der restlichen Karte beim Zoomen:', zoom_load_time.toFixed(2), 'ms', 'oder', (zoom_load_time / 1000).toFixed(2), 's');
+            is_zoomed = false;
+            zoom_start_time = null;
+          } else {
+            if (drag_start_time !== null) {
+              const drag_end_time = performance.now();
+              const drag_load_time = drag_end_time - drag_start_time;
+              console.log('Ladezeit der restlichen Karte beim Verschieben:', drag_load_time.toFixed(2), 'ms', 'oder', (drag_load_time / 1000).toFixed(2), 's');
+              drag_start_time = null;
+            }
+          }
+        });
+
+        google.maps.event.addListener(map, 'bounds_changed', function() {
+          if (!is_zoomed && !first_load) {
+            drag_start_time = performance.now();
+          }
+          first_load = false;
+        });
+      }
+
+      initMap();
+
+
+
+    </script>
+  </body>
+</html>
+
+
