@@ -56,7 +56,7 @@
     const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
     
  
-  var mapOptions = {
+  var map_options = {
     zoom: 9,
     center: position1,
     mapId: "c7056e91ec100a2a",
@@ -65,7 +65,7 @@
    
   
   
-    map =  new Map(document.getElementById("map"), mapOptions);
+    map =  new Map(document.getElementById("map"), map_options);
   
 
   
@@ -75,21 +75,21 @@
   
   google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
   
-      var endTime = performance.now();
+      var end_time = performance.now();
   
      
-      var loadTime = endTime - startTime;
-      console.log('Karte geladen und gerendert in:', loadTime.toFixed(2), 'ms', 'oder', (loadTime / 1000).toFixed(2), 's');
+      var load_time = end_time - startTime;
+      console.log('Karte geladen und gerendert in:', load_time.toFixed(2), 'ms', 'oder', (load_time / 1000).toFixed(2), 's');
   
       var measurements = JSON.parse(localStorage.getItem('measurements')) || [];
-      measurements.push(parseInt(loadTime.toFixed(2)));
+      measurements.push(parseInt(load_time.toFixed(2)));
       localStorage.setItem('measurements', JSON.stringify(measurements));
   
       if (measurements.length >= 20) {
   
         var sum = measurements.reduce((total, current) => total + current, 0);
-        var average = sum / measurements.length;
-        console.log('Anzahl der Messungen:', measurements.length ,'Durchschnittliche Ladezeit:', average, 'ms');
+        var avg = sum / measurements.length;
+        console.log('Anzahl der Messungen:', measurements.length ,'Durchschnittliche Ladezeit:', avg, 'ms');
       }
    
   
