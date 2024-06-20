@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thesis_Tests</title>
+    <style>
+ 
+    #map{
+      width: 800px !important;
+      margin: auto !important;
+    }
+
+    #controls {
+            background: white;
+            padding: 10px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 5;
+        }
+    </style>
+
+
+  </head>
+  <body>
+
+ <div id="controls">
+      <label><input type="checkbox" checked="true" id="toggleKML" />KML Layer</label><br />
+      <label><input type="checkbox"  id="toggleGeoJSON" checked="true" />GeoJSON Layer</label> <br>
+
+  </div>
+    <div id="map" style="height: 400px;"></div>
+  
+
+  
+
+<script>
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+      key: "AIzaSyDt_ekwkFIvcCIbWcQs8aR-A33-KDcpN5Q",
+      v: "beta",
+    
+    });
+  </script>
+
+<script>
+
+
+
+let map;
+let data = null; 
+
+
+
+async function fetch_data() {
+    try {
+        const response = await fetch('https://raw.githubusercontent.com/isellsoap/deutschlandGeoJSON/main/1_deutschland/2_hoch.geo.json');
+        const data = await response.json();
+        map.data.addGeoJson(data);
+        console.log(data);
+     
+    } catch (error) {
+        console.error(error);
+        throw error; 
+    }
+} 
+
+
+
+
+async function initMap() {
+
+  const position1 = { lat: 48.78, lng: 9.18 };
+  const position2 = { lat: 48.78042051275773, lng: 9.17259701727862};
+
+  const { Map } = await google.maps.importLibrary("maps");
+  const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
+  
+
+
+var map_options = {
+  zoom: 7,
+  center: position1,
+  mapId: "c7056e91ec100a2a",
+
+}
+
+  map =  new Map(document.getElementById("map"), map_options);
+ 
+  
+   await fetch_data();
+
+
+  const kml_layer = new google.maps.KmlLayer({
+
+    url: "https://raw.githubusercontent.com/Upuaut/APRS_Projects/master/Data/Europe.kml",
+    map: map,
+    zIndex: 2 
+  });
+  console.log("KML-Schicht erstellt:", kml_layer);
+  kml_layer.addListener("status_changed", () => {
+  console.log("KML-Schicht Status:", kml_layer.getStatus());
+}) 
+
+document.getElementById('toggleKML').addEventListener('change', function() {
+        kml_layer.setMap(this.checked ? map : null);
+    });
+
+    document.getElementById('toggleGeoJSON').addEventListener('change', function() {
+        if (this.checked) {
+            map.data.setStyle({ visible: true }); 
+        } else {
+            map.data.setStyle({ visible: false }); 
+        }
+    });
+
+
+   
+
+
+
+  }
+
+
+initMap();
+
+
+
+     </script> 
+
+
+
+  </body>
+</html>
