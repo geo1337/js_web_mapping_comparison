@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script>
+    var start_time = performance.now();
+    var zoom_counter = 0;
+    var drag_counter = 0;
+
+    var map = L.map('map').setView([51.505, -0.09], 13);
+
+    var tile_layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+
+    var zoom_start_time, drag_start_time;
+
+    map.on('zoomstart', function() {
+        zoom_start_time = performance.now();
+        zoom_counter++;
+    });
+
+    map.on('zoomend', function() {
+        var zoomEndTime = performance.now();
+        var zoomTime = zoomEndTime - zoom_start_time;
+        console.log(`Zoom-Nummer ${zoom_counter} - Zoom-Dauer: ${zoomTime.toFixed(2)} Millisekunden`);
+
+        if (tile_layer) {
+            tile_layer.once('load', function() {
+                var end_time_2 = performance.now();
+                var load_time_2 = end_time_2 - zoom_start_time;
+                console.log(`Alle Kacheln der Karte beim Zoomen geladen in: ${load_time_2.toFixed(2)} Millisekunden`);
+            });
+        }
+    });
+
+    map.on('dragstart', function() {
+        drag_start_time = performance.now();
+        drag_counter++;
+    });
+
+    map.on('dragend', function() {
+        if (tile_layer) {
+            tile_layer.once('load', function() {
+                var end_time_3 = performance.now();
+                var load_time_3 = end_time_3 - drag_start_time;
+                console.log(`Drag-Nummer ${drag_counter} - Alle Kacheln der Karte beim Verschieben geladen in: ${load_time_3.toFixed(2)} Millisekunden`);
+            });
+        }
+    });
+
+  
+</script>
+
+</body>
+</html>
