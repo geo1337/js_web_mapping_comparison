@@ -1,41 +1,33 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
-  "private": true,
+  "name": "thesis_webapp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
-    "@react-google-maps/api": "^2.19.3",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
+    "chart.js": "^4.4.2",
+    "chromedriver": "^125.0.0",
+    "cpu-stat": "^2.0.1",
+    "csv-writer": "^1.6.0",
+    "express": "^4.19.2",
+    "geckodriver": "^4.4.0",
     "leaflet": "^1.9.4",
+    "mocha": "10.4.0",
+    "os-utils": "^0.0.14",
+    "performance-now": "^2.1.0",
+    "pidusage": "^3.0.2",
+    "puppeteer": "^22.9.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-leaflet": "^4.2.1",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "react-scripts": "^5.0.1",
+    "selenium-webdriver": "^4.21.0",
+    "systeminformation": "^5.22.9",
+    "windows-cpu": "^1.1.0",
+    "xml-js": "^1.6.11"
   }
 }
