@@ -5,3 +5,4 @@ Sämtliche API-Keys wurden aus Sicherheitsgründen entfernt.
 
 Node.js Module sowie andere Dependencies wurden nicht hochgeladen, nur eigene Implementierungen.
 
+Dependencies können in package.json eingesehen werden
