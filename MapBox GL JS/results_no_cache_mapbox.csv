@@ -1,0 +1,17 @@
+Testart,Browser,Ladezeit (ms),CPU-Nutzung (%),Ramverbrauch (MB),Anfragen,Durchschnittliche Latenz (ms),GPU nach dem Laden der Seite: Temperatur,GPU nach dem Laden der Seite: %-Nutzung,GPU nach Tiles loaded: Temperatur,GPU nach Tiles loaded: %-Nutzung
+Normal,chrome,969,3.00,217.82,5,67.34,41, 4 %,41, 2 %
+Normal,chrome,938,2.00,227.19,4,63.27,41, 4 %,40, 6 %
+Normal,chrome,950,2.00,217.40,3,60.87,41, 2 %,40, 6 %
+Durchschnitt Normalfall,chrome,952.33,2.33,220.80,4.00,63.83,138047.00,NaN,138013.33,NaN
+Stresstest,chrome,1600,11.00,398.79,13,82.89,41, 5 %,40, 8 %
+Stresstest,chrome,1612,-3.00,401.81,8,61.45,41, 6 %,40, 35 %
+Stresstest,chrome,1526,-9.00,399.86,9,61.41,41, 5 %,40, 14 %
+Durchschnitt Stresstest,chrome,1579.33,-0.33,400.15,10.00,68.59,138047.00,NaN,134680.00,NaN
+Normal,MicrosoftEdge,1010,6.00,227.62,3,72.26,41, 6 %,40, 12 %
+Normal,MicrosoftEdge,994,-5.00,216.42,3,64.66,42, 5 %,42, 5 %
+Normal,MicrosoftEdge,1261,-1.00,241.97,4,93.43,42, 3 %,41, 4 %
+Durchschnitt Normalfall,MicrosoftEdge,1088.33,0.00,228.67,3.33,76.78,138080.67,NaN,134747.00,NaN
+Stresstest,MicrosoftEdge,1768,0.00,414.30,7,91.72,42, 7 %,41, 22 %
+Stresstest,MicrosoftEdge,1589,-1.00,406.88,8,97.09,42, 5 %,41, 10 %
+Stresstest,MicrosoftEdge,1738,-7.00,408.14,7,90.52,42, 5 %,41, 13 %
+Durchschnitt Stresstest,MicrosoftEdge,1698.33,-2.67,409.77,7.33,93.11,141414.00,NaN,138047.00,NaN
