@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Thesis_MapBox</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+<style>
+ body, html {
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #map {
+            width: 80%;
+            height: 80%;
+            max-width: 800px;
+            max-height: 600px;
+            border: 1px solid #ccc;
+        }
+     
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+  
+
+
+
+    mapboxgl.accessToken = ' ';
+    const map = new mapboxgl.Map({
+	container: 'map', 
+	style: 'mapbox://styles/mapbox/streets-v12', 
+	center: [10, 50],
+    zoom: 5, 
+});
+
+var multiple_markers = [];
+            for (var i = 0; i < 2000; i++) {
+                multiple_markers.push({
+                    lngLat: random_coordinates()
+                });
+            }
+
+           
+            multiple_markers.forEach(function(marker) {
+                new mapboxgl.Marker()
+                    .setLngLat(marker.lngLat)
+                    .addTo(map);
+            
+            });
+       
+
+      
+        function random_coordinates() {
+            var lng = (Math.random() * 360) - 180; 
+            var lat = (Math.random() * 160) - 80; 
+            return [lng, lat];
+        }
+
+
+
+        map.on('load', function () { 
+
+      document.body.setAttribute('data-mapbox-loaded', 'true');
+     
+  });
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>
