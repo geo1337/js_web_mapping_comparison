@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thesis_Tests_Visualisierungen</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-downloader"></script> 
+    <style>
+ 
+
+ #chart-container,#chart-container_2 {
+            display: flex;
+            justify-content: space-around !important;
+            align-items: center !important;
+            flex-direction: column !important;
+        }
+
+        #myChart,
+        #myChart2,
+        #myChart3,
+        #myChart4
+         {
+            background-color: white;
+            max-width: 1000px !important;
+            max-height: 800px !important;
+        }
+
+        #myChart5 {
+            background-color: white;
+            max-width: 1400px !important;
+            max-height: 800px !important;
+        }
+ 
+
+
+    </style>
+
+
+  </head>
+  <body>
+
+
+
+    <div id="chart-container">
+        <h1>Google Maps JavaScript API</h1>
+      <div style="display: flex;">
+       
+   <canvas id="myChart"></canvas>
+  
+   <canvas id="myChart2"></canvas>
+  </div>
+  <div style="display:flex">
+   <canvas id="myChart3"></canvas>
+   <canvas id="myChart4"></canvas>
+  
+  </div>
+  <canvas id="myChart5"></canvas>
+    </div>
+
+
+  
+<script>
+
+
+
+        const ctx1 = document.getElementById('myChart').getContext('2d');
+        const ctx2 = document.getElementById('myChart2').getContext('2d');
+        const ctx3 = document.getElementById('myChart3').getContext('2d');
+        const ctx4 = document.getElementById('myChart4').getContext('2d');
+        const ctx5 = document.getElementById('myChart5').getContext('2d');
+  
+        async function data() {
+            try {
+                const response = await fetch('./results_no_cache.csv');
+                //const response = await fetch('./results_no_cache_mapbox.csv');
+                //const response = await fetch('./results_no_cache_leaflet.csv');
+                
+                if (!response.ok) {
+                    throw new Error(`Fehler: ${response.statusText}`);
+                }
+                const text = await response.text();
+                const lines = text.split('\n').filter(line => line.trim() !== '');
+
+                const browsers = {};
+                const req_counts = {}; 
+                const cpuusage = { chrome: [], edge: [] }; 
+                const latency = { chrome: [], edge: [] };
+
+                for (const line of lines) {
+                    const fields = line.split(',').map(field => field.trim());
+                    const test = fields[0];
+                    const browser = fields[1].toLowerCase(); 
+                    const load_time = parseFloat(fields[2]);
+                    const memory = parseFloat(fields[4]); 
+                    const requests = parseInt(fields[5]); 
+                    const cpu = parseFloat(fields[3]);
+                    const avg_latency = parseFloat(fields[6]); 
+
+
+                   // console.log(` ${browser},  ${test}`);
+
+                    if (test.startsWith('Durchschnitt')) {
+    if (!browsers[browser]) {
+        browsers[browser] = {};
+    }
+    browsers[browser][test] = { load_time, memory }; 
+
+
+    if (!req_counts[browser]) {
+        req_counts[browser] = [];
+    }
+    req_counts[browser].push(requests);
+} else {
+ 
+    if (browser === 'microsoftedge') {
+        cpuusage.edge.push(cpu);
+        latency.edge.push(avg_latency);
+    } else if (browser === 'chrome') {
+        cpuusage.chrome.push(cpu);
+        latency.chrome.push(avg_latency);
+    }
+}
+                }
+
+               // console.log('CPU', cpuusage);
+               // console.log('Latenz', latency)
+
+                const labels = Object.keys(browsers);
+                const values = labels.map(browser => ({
+                    Normalfall: browsers[browser]['Durchschnitt Normalfall'],
+                    Stresstest: browsers[browser]['Durchschnitt Stresstest']
+                }));
+
+                return { labels, values, browsers, req_counts, cpuusage, latency };
+            } catch (error) {
+                console.error(error);
+                return null;
+            }
+        }
+
+        async function draw_charts() {
+            const data = await data();
+            if (!data) return;
+
+            const chart1 = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Normalfall (durchschnittliche Ladezeit in ms)',
+                        data: data.values.map(value => value.Normalfall.loadTime), 
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Stresstest (durchschnittliche Ladezeit in ms)',
+                        data: data.values.map(value => value.Stresstest.loadTime), 
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+            const chart2 = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Genutzter RAM (MB) im Durchschnitt (Normalfall)',
+                        data: data.values.map(value => value.Normalfall.memoryDiff),
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        fill: false
+                    }, {
+                        label: 'Genutzter RAM (MB) im Durchschnitt (Stresstest)',
+                        data: data.values.map(value => value.Stresstest.memoryDiff),
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+            const chart3 = new Chart(ctx3, {
+                type: 'scatter',
+                data: {
+                    datasets: Object.keys(data.requestCounts).map(browser => ({
+                        label: browser,
+                        data: data.requestCounts[browser].map((count, index) => ({ x: index, y: count })),
+                        backgroundColor: browser === 'chrome' ? 'rgba(255, 99, 132, 0.6)' : 'rgba(54, 162, 235, 0.6)',
+                        borderColor: browser === 'chrome' ? 'rgba(255, 99, 132, 1)' : 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }))
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: 'category', 
+                            labels: Object.keys(data.requestCounts),
+                            position: 'bottom',
+                            scaleLabel: { 
+                                display: true,
+                                labelString: 'Browser'
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Anzahl versendeter Anfragen'
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+            const chart4 = new Chart(ctx4, {
+                type: 'line',
+                data: {
+                    labels: data.cpuUsageData.chrome.map((_, index) => `Test ${index + 1}`),
+                    datasets: [{
+                        label: 'CPU Verbrauch % (Chrome)',
+                        data: data.cpuUsageData.chrome,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)', 
+                        borderColor: 'rgba(54, 162, 235, 1)', 
+                        borderWidth: 1,
+                        fill: false
+                    }, {
+                        label: 'CPU Verbrauch % (Edge)',
+                        data: data.cpuUsageData.edge,
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)', 
+                        borderColor: 'rgba(255, 99, 132, 1)', 
+                        borderWidth: 1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'CPU Nutzung'
+                            }
+                        }],
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Test Nummer'
+                            }
+                        }]
+                    }
+                }
+            });
+            const chart5 = new Chart(ctx5, {
+        type: 'bar',
+        data: {
+            labels: data.latencyData.chrome.map((_, index) => `Test ${index + 1}`),
+            datasets: [{
+                label: 'Durchschnittliche Latenz (ms) (Chrome)',
+                data: data.latencyData.chrome,
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                fill: false
+            }, {
+                label: 'Durchschnittloche Latenz (ms) (Edge)',
+                data: data.latencyData.edge,
+                backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1,
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Durchshcnittliche Latenz (ms)'
+                    }
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Test Nummer'
+                    }
+                }]
+            }
+        }
+    });
+}
+
+
+
+
+draw_charts();
+
+
+     </script>
+  </body>
+</html>
